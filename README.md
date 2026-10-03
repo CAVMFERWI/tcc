@@ -39,3 +39,6 @@ A página soma os pontos ao jogador logado, salva no `localStorage` e atualiza o
 
 - Colocar o export HTML5 do Godot em `godot/` e chamar `enviar_pontos()` no GDScript (ver acima). Depois disso, o botão "Simular +10 pontos" pode ser removido.
 - `localStorage` cobre o critério de persistência do protótipo; para ranking real entre escolas, sincronizar com Firebase (ver seção 5.9.4 do projeto de pesquisa), mantendo o `localStorage` como cache local.
+
+
+https://cavmferwi.github.io/tcc/
