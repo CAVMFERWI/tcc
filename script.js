@@ -8,7 +8,7 @@ const STORAGE_SESSION = "ngn_current_user";
 // Critério 1/4: godot/index.html ainda não existe no repositório, então o
 // iframe nem tenta carregar (evita 404 e erro vermelho no console).
 // Troque para `true` só depois de subir o export do Godot em godot/.
-const JOGO_PRONTO = false;
+const JOGO_PRONTO = true;
 
 function lerJogadores() {
   try {
