@@ -5,90 +5,423 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NGN Technologies</title>
 <meta name="description" content="Jogo educativo de conscientização ambiental e prevenção de desastres naturais para jovens do RS.">
+<meta name="theme-color" content="#0a1812">
 <!-- Critério 4: favicon vazio evita o 404 vermelho de /favicon.ico no console -->
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="styles.css?v=2">
+<!-- O número depois de ?v= sobe a cada mudança, para o navegador não usar CSS/JS antigo em cache -->
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
-<body>
-<header class="topbar">
-  <p class="logo">NGN <span>Technologies</span></p>
-  <nav aria-label="Navegação principal">
-    <button type="button" class="nav-btn" data-target="tela-jogo">Jogo</button>
-    <button type="button" class="nav-btn" data-target="tela-ranking">Ranking</button>
-    <button type="button" class="nav-btn" id="btn-sair">Sair</button>
-  </nav>
-</header>
+<body data-tela="tela-inicio">
+<a class="pular" href="#conteudo">Ir para o conteúdo</a>
 
-<main>
+<!-- Ícones e ilustração reutilizados na página -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g-ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f3cf"/><stop offset="1" stop-color="#cfe6c8"/></linearGradient>
+    <radialGradient id="g-sol" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbe0" stop-opacity=".95"/><stop offset="1" stop-color="#fffbe0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="g-rio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc4c9"/><stop offset="1" stop-color="#2c8c9c"/></linearGradient>
+    <linearGradient id="g-folha" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8cc46e"/><stop offset="1" stop-color="#2f7a44"/></linearGradient>
+    <linearGradient id="g-folha2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb36a"/><stop offset="1" stop-color="#1f6a3e"/></linearGradient>
+    <clipPath id="c-disco"><circle cx="240" cy="215" r="160"/></clipPath>
+    <symbol id="pino" viewBox="0 0 24 40"><path d="M12 0l8 14h-4l6 11H15l5 9H4l5-9H2l6-11H4z" fill="currentColor"/><rect x="10.5" y="33" width="3" height="7" fill="#26402c"/></symbol>
+  </defs>
 
-  <!-- TELA 1: LOGIN / CADASTRO -->
-  <section id="tela-login" class="tela">
-    <h1>Bem-vindo ao NGN Technologies</h1>
-    <p>Jogo educativo sobre desastres naturais e conscientização ambiental no Rio Grande do Sul.</p>
+  <!-- Ilustração redonda (folhas, cidade, rio, turbina eólica) -->
+  <symbol id="arte" viewBox="0 0 480 440">
+    <circle cx="240" cy="215" r="205" fill="none" stroke="#86ad8f" stroke-width="1.2"/>
+    <g fill="#7fa88a"><circle cx="38" cy="70" r="3"/><circle cx="38" cy="86" r="3"/><circle cx="38" cy="102" r="3"/><circle cx="38" cy="118" r="3"/></g>
+    <circle cx="240" cy="215" r="160" fill="url(#g-ceu)"/>
+    <g clip-path="url(#c-disco)">
+      <circle cx="250" cy="130" r="95" fill="url(#g-sol)"/>
+      <!-- cidade ao fundo -->
+      <g fill="#8fb59f"><rect x="255" y="150" width="22" height="110"/><rect x="280" y="120" width="26" height="140"/><rect x="309" y="165" width="20" height="95"/><rect x="332" y="140" width="24" height="120"/><rect x="226" y="180" width="26" height="80"/></g>
+      <g fill="#a9c9b3"><rect x="262" y="160" width="4" height="6"/><rect x="262" y="176" width="4" height="6"/><rect x="288" y="132" width="4" height="6"/><rect x="288" y="150" width="4" height="6"/><rect x="340" y="152" width="4" height="6"/></g>
+      <!-- turbina eólica -->
+      <g stroke="#e9efe0" stroke-width="3" stroke-linecap="round"><path d="M372 250V160"/><path d="M372 160l0-38M372 160l33 19M372 160l-33 19"/></g>
+      <circle cx="372" cy="160" r="4" fill="#e9efe0"/>
+      <!-- colinas -->
+      <path d="M60 270Q130 190 210 235T350 225T420 250V380H60Z" fill="#9ccaa0"/>
+      <path d="M60 300Q140 235 230 275T400 270V380H60Z" fill="#5fa476"/>
+      <!-- floresta -->
+      <path d="M60 322Q130 288 200 312T330 312T420 322V380H60Z" fill="#2c6b46"/>
+      <g color="#58a870"><use href="#pino" x="96" y="228" width="34" height="58"/><use href="#pino" x="132" y="244" width="30" height="52"/><use href="#pino" x="168" y="232" width="34" height="58"/><use href="#pino" x="308" y="236" width="34" height="58"/><use href="#pino" x="344" y="222" width="38" height="64"/><use href="#pino" x="384" y="244" width="30" height="52"/></g>
+      <g color="#256a43"><use href="#pino" x="84" y="262" width="42" height="70"/><use href="#pino" x="128" y="276" width="36" height="60"/><use href="#pino" x="160" y="262" width="40" height="66"/><use href="#pino" x="318" y="268" width="40" height="66"/><use href="#pino" x="356" y="258" width="44" height="74"/><use href="#pino" x="396" y="276" width="34" height="58"/></g>
+      <!-- rio -->
+      <path d="M232 238C262 262 200 290 238 320S262 360 246 392" fill="none" stroke="#dcefe8" stroke-width="34" stroke-linecap="round"/>
+      <path d="M232 238C262 262 200 290 238 320S262 360 246 392" fill="none" stroke="url(#g-rio)" stroke-width="26" stroke-linecap="round"/>
+      <path d="M232 238C262 262 200 290 238 320S262 360 246 392" fill="none" stroke="#e6f5f2" stroke-opacity=".55" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <!-- folhas grandes na frente -->
+    <g transform="translate(26 392) rotate(-22)">
+      <path d="M0 0C50-78 150-70 205-4C150 72 50 74 0 0Z" fill="url(#g-folha)"/>
+      <path d="M6 0C70-6 140-6 198-4" fill="none" stroke="#d6ecc8" stroke-width="2.5" stroke-linecap="round" stroke-opacity=".7"/>
+      <path d="M50-4l40-30M80-4l44-28M110-4l40-24M50-2l40 30M80-2l44 28M110-2l40 24" stroke="#d6ecc8" stroke-width="1.6" stroke-opacity=".5" fill="none"/>
+    </g>
+    <g transform="translate(452 352) rotate(-160)">
+      <path d="M0 0C46-72 140-66 190-4C140 66 46 68 0 0Z" fill="url(#g-folha2)"/>
+      <path d="M6 0C66-6 130-6 184-4" fill="none" stroke="#d6ecc8" stroke-width="2.5" stroke-linecap="round" stroke-opacity=".7"/>
+      <path d="M46-4l38-28M74-4l40-26M102-4l36-22M46-2l38 28M74-2l40 26M102-2l36 22" stroke="#d6ecc8" stroke-width="1.6" stroke-opacity=".5" fill="none"/>
+    </g>
+  </symbol>
 
-    <form id="form-auth" novalidate>
-      <div class="campo">
-        <label for="nome">Nome</label>
-        <input type="text" id="nome" name="nome" required minlength="2" autocomplete="name">
-      </div>
-      <div class="campo">
-        <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
-      </div>
-      <div class="campo">
-        <label for="escola">Escola</label>
-        <input type="text" id="escola" name="escola" autocomplete="organization">
-      </div>
-      <button type="submit" class="btn-primario">Entrar / Cadastrar</button>
-      <p id="auth-feedback" role="status" aria-live="polite"></p>
-    </form>
-  </section>
+  <!-- Ícones -->
+  <symbol id="i-folha" viewBox="0 0 24 24"><path d="M5 19C5 9 11 4 20 4c0 9-5 15-13 15M5 19c2-4 5-7 9-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5M5.5 10v10h5v-6h3v6h5V10" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-livro" viewBox="0 0 24 24"><path d="M3 5.5C5.5 4.5 9 4.5 12 6.5c3-2 6.500-2 9-1V19c-2.500-1-6-1-9 1-3-2-6.500-2-9-1z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 6.500V20" stroke="#0a1812" stroke-width="1.2" opacity=".5"/></symbol>
+  <symbol id="i-controle" viewBox="0 0 24 24"><path d="M7 7h10a5 5 0 015 5v2.500a3.500 3.500 0 01-6 2.400L14.500 15.500h-5L8 17a3.500 3.500 0 01-6-2.500V12a5 5 0 015-5z" fill="currentColor"/><path d="M8 10v3M6.500 11.500h3" stroke="#0a1812" stroke-width="1.600" stroke-linecap="round"/><circle cx="16" cy="10.800" r="1" fill="#0a1812"/><circle cx="18" cy="12.800" r="1" fill="#0a1812"/></symbol>
+  <symbol id="i-trofeu" viewBox="0 0 24 24"><path d="M7 3h10v6a5 5 0 01-10 0z" fill="currentColor"/><path d="M7 5H3.500v1.500A4 4 0 007.200 10.500M17 5h3.500v1.500a4 4 0 01-3.700 4M12 14v4M8 21h8M9.500 18h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.500" fill="currentColor"/><path d="M12 11v6M12 7.500v.5" stroke="#0a1812" stroke-width="2.200" stroke-linecap="round"/></symbol>
+  <symbol id="i-info-o" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.500v.5" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/></symbol>
+  <symbol id="i-globo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.800"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.600"/></symbol>
+  <symbol id="i-nuvem" viewBox="0 0 24 24"><path d="M7 15a4 4 0 010-8 5 5 0 019.500 1A3.500 3.500 0 0117 15z" fill="currentColor"/><path d="M12.500 14l-2 3.500h3l-2 3.500" fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-broto" viewBox="0 0 24 24"><path d="M12 21v-9M12 12c0-4-3-6-7-6 0 4 3 6 7 6zM12 14c0-3.500 2.500-5.500 7-5.500 0 3.500-3 5.500-7 5.500z" fill="none" stroke="currentColor" stroke-width="1.900" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mapa" viewBox="0 0 24 24"><path d="M12 21s-6.500-6-6.500-11a6.500 6.500 0 0113 0c0 5-6.500 11-6.500 11z" fill="none" stroke="currentColor" stroke-width="1.900" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.400" fill="currentColor"/></symbol>
+  <symbol id="i-gota" viewBox="0 0 24 24"><path d="M12 3c4 5 6 8 6 11a6 6 0 01-12 0c0-3 2-6 6-11z" fill="currentColor"/></symbol>
+  <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z" fill="currentColor"/><path d="M8.500 12l2.500 2.500 4.500-5" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-capelo" viewBox="0 0 24 24"><path d="M12 4L2 9l10 5 10-5z" fill="currentColor"/><path d="M6 12v4.500c0 1.500 2.700 3 6 3s6-1.500 6-3V12" fill="none" stroke="currentColor" stroke-width="1.800"/></symbol>
+  <symbol id="i-pessoas" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3.200" fill="currentColor"/><circle cx="17" cy="9" r="2.600" fill="currentColor"/><path d="M2 20c0-3.800 2.700-6 6-6s6 2.200 6 6zM14.500 20c.2-2.600 1.800-4.500 4.500-4.500 2 0 3.200 1 3.500 4.500z" fill="currentColor"/></symbol>
+  <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8.500" r="4" fill="currentColor"/><path d="M4 21c0-4.500 3.500-7 8-7s8 2.500 8 7z" fill="currentColor"/></symbol>
+  <symbol id="i-seta" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-sair" viewBox="0 0 24 24"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.200 19.500c.5.100.7-.2.7-.5v-1.800c-2.800.6-3.400-1.200-3.400-1.200-.5-1.200-1.100-1.500-1.100-1.500-.9-.6.100-.6.100-.6 1 .1 1.500 1 1.500 1 .9 1.500 2.400 1.100 2.900.8.100-.7.400-1.100.6-1.400-2.200-.3-4.600-1.100-4.600-5 0-1.100.4-2 1-2.700-.1-.3-.4-1.300.1-2.700 0 0 .8-.3 2.800 1a9.600 9.600 0 015 0c1.900-1.300 2.800-1 2.800-1 .5 1.400.2 2.400.1 2.700.6.700 1 1.600 1 2.700 0 3.900-2.400 4.700-4.600 5 .4.300.7.900.7 1.800v2.700c0 .3.200.6.700.5A10 10 0 0012 2z" fill="currentColor"/></symbol>
+</svg>
 
-  <!-- TELA 2: JOGO -->
-  <section id="tela-jogo" class="tela oculta">
-    <h1>Jogando: <span id="jogador-nome">-</span></h1>
-    <p>Pontuação atual: <strong id="jogador-pontos">0</strong></p>
+<div class="app">
 
-    <!--
-      Export HTML5 do Godot fica em godot/ (index.html/js/wasm/pck).
-      O iframe isola o canvas e o teclado do Godot da página: os forms e
-      botões daqui continuam com preventDefault() (critério 2).
-      O src é preenchido pelo script.js só quando a tela do jogo abre,
-      para o Godot não iniciar escondido num iframe de tamanho zero.
-    -->
-    <div class="jogo-embed">
-      <iframe id="jogo-frame" class="oculta" data-src="godot/index.html"
-              title="Jogo NGN Technologies: conscientização ambiental e prevenção de desastres naturais"
-              aria-describedby="jogo-descricao" allow="autoplay; fullscreen"></iframe>
-      <p id="jogo-placeholder">O jogo ainda não foi publicado nesta versão do site.</p>
+  <!-- MENU LATERAL (vira barra inferior no celular) -->
+  <aside class="lateral">
+    <p class="logo">
+      <svg class="logo-folha" aria-hidden="true"><use href="#i-folha"/></svg>
+      <span class="logo-ngn">NGN</span>
+      <small>TECHNOLOGIES</small>
+    </p>
+    <nav aria-label="Navegação principal">
+      <button type="button" class="nav-btn" data-target="tela-inicio"><svg aria-hidden="true"><use href="#i-casa"/></svg><span>Início</span></button>
+      <button type="button" class="nav-btn" data-target="tela-aprender"><svg aria-hidden="true"><use href="#i-livro"/></svg><span>Aprender</span></button>
+      <button type="button" class="nav-btn" data-target="tela-jogo"><svg aria-hidden="true"><use href="#i-controle"/></svg><span>Desafios</span></button>
+      <button type="button" class="nav-btn" data-target="tela-ranking"><svg aria-hidden="true"><use href="#i-trofeu"/></svg><span>Ranking</span></button>
+      <button type="button" class="nav-btn" data-target="tela-sobre"><svg aria-hidden="true"><use href="#i-info"/></svg><span>Sobre</span></button>
+    </nav>
+    <div class="lateral-rodape">
+      <a class="social" href="https://github.com/CAVMFERWI/tcc" target="_blank" rel="noopener noreferrer" aria-label="Código do projeto no GitHub (abre em nova aba)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
+      <p>&copy; 2026 NGN Technologies.<br>Todos os direitos reservados.</p>
     </div>
-    <!-- Critério 5: texto alternativo do jogo para leitores de tela -->
-    <p id="jogo-descricao" class="sr-only">Jogo educativo feito na Godot Engine em que o jogador aprende a prevenir e agir em desastres naturais no Rio Grande do Sul. Use o teclado ou o mouse dentro da área do jogo.</p>
+  </aside>
 
-    <button type="button" id="btn-simular-pontos" class="btn-secundario">Simular +10 pontos (teste sem o jogo)</button>
-    <p id="jogo-feedback" role="status" aria-live="polite"></p>
-  </section>
+  <div class="coluna">
+    <!-- formas diagonais decorativas (aparecem em Início e Sobre) -->
+    <div class="formas" aria-hidden="true"><span class="forma-preta"></span><span class="forma-verde"></span></div>
 
-  <!-- TELA 3: RANKING -->
-  <section id="tela-ranking" class="tela oculta">
-    <h1>Ranking</h1>
-    <table>
-      <caption class="sr-only">Ranking de jogadores por pontuação, do maior para o menor</caption>
-      <thead>
-        <tr><th scope="col">Posição</th><th scope="col">Jogador</th><th scope="col">Escola</th><th scope="col">Pontos</th></tr>
-      </thead>
-      <tbody id="ranking-corpo">
-        <tr><td colspan="4">Nenhum jogador cadastrado ainda.</td></tr>
-      </tbody>
-    </table>
-  </section>
+    <header class="topo">
+      <p class="logo logo-mobile" aria-hidden="true">
+        <svg class="logo-folha"><use href="#i-folha"/></svg>
+        <span class="logo-ngn">NGN</span>
+      </p>
+      <div class="topo-acoes">
+        <!-- Visitante -->
+        <div id="auth-visitante" class="grupo">
+          <button type="button" class="btn btn-claro" id="abrir-entrar"><svg aria-hidden="true"><use href="#i-usuario"/></svg>Entrar</button>
+          <button type="button" class="btn btn-escuro" id="abrir-cadastro"><svg aria-hidden="true"><use href="#i-usuario"/></svg>Cadastre-se</button>
+        </div>
+        <!-- Jogador logado -->
+        <div id="auth-logado" class="grupo oculta">
+          <p class="chip" aria-live="polite"><svg aria-hidden="true"><use href="#i-usuario"/></svg><span id="chip-nome">-</span><b id="chip-pontos">0</b><span class="pts">pts</span></p>
+          <button type="button" class="btn btn-escuro" id="btn-sair"><svg aria-hidden="true"><use href="#i-sair"/></svg>Sair</button>
+        </div>
+      </div>
+    </header>
 
-</main>
+    <main id="conteudo" tabindex="-1">
 
-<footer>
-  <p>NGN Technologies &middot; Projeto Técnico em Informática &middot; ETE Monteiro Lobato</p>
-</footer>
+      <!-- ===== INÍCIO ===== -->
+      <section id="tela-inicio" class="tela" aria-labelledby="t-inicio">
+        <div class="hero">
+          <div class="hero-texto">
+            <p class="selo"><svg aria-hidden="true"><use href="#i-folha"/></svg>Jogo educativo</p>
+            <h1 id="t-inicio" tabindex="-1"><span class="h1-ngn">NGN</span><span class="h1-tech">Technologies</span></h1>
+            <p class="tagline"><svg aria-hidden="true"><use href="#i-folha"/></svg>Aprenda, jogue e faça a diferença.</p>
+            <p class="hero-p">Descubra como pequenas atitudes podem transformar o futuro do nosso planeta.</p>
+            <div class="hero-botoes">
+              <button type="button" class="btn btn-escuro btn-grande" data-ir="tela-jogo">Jogar agora<svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+              <button type="button" class="btn btn-claro btn-grande" data-ir="tela-sobre">Saiba mais<svg aria-hidden="true"><use href="#i-info-o"/></svg></button>
+            </div>
+          </div>
+          <div class="hero-arte">
+            <svg viewBox="0 0 480 440" role="img" aria-label="Ilustração de um círculo com cidade, floresta, rio e turbina eólica entre duas grandes folhas"><use href="#arte"/></svg>
+          </div>
+        </div>
 
-<script src="script.js?v=2"></script>
+        <ul class="tres">
+          <li><svg aria-hidden="true"><use href="#i-folha"/></svg><div><h2>Aprenda</h2><p>Conteúdos sobre meio ambiente, sustentabilidade e mudanças climáticas.</p></div></li>
+          <li><svg aria-hidden="true"><use href="#i-controle"/></svg><div><h2>Jogue</h2><p>Desafios interativos que tornam o aprendizado divertido e envolvente.</p></div></li>
+          <li><svg aria-hidden="true"><use href="#i-globo"/></svg><div><h2>Transforme</h2><p>Suas escolhas no jogo ajudam a entender o impacto real no mundo.</p></div></li>
+        </ul>
+      </section>
+
+      <!-- ===== APRENDER ===== -->
+      <section id="tela-aprender" class="tela oculta" aria-labelledby="t-aprender">
+        <header class="cab-pagina">
+          <div class="cab-texto">
+            <p class="selo"><svg aria-hidden="true"><use href="#i-livro"/></svg>Aprender</p>
+            <h1 id="t-aprender" class="titulo-grande" tabindex="-1">Aprender</h1>
+            <p class="sub">Explore conteúdos sobre mudanças climáticas, sustentabilidade, desastres naturais e prevenção de riscos.</p>
+          </div>
+          <div class="cab-arte" aria-hidden="true"><svg viewBox="0 0 480 440"><use href="#arte"/></svg></div>
+        </header>
+
+        <ul class="modulos">
+          <li class="modulo" data-id="clima">
+            <span class="modulo-icone"><svg aria-hidden="true"><use href="#i-globo"/></svg></span>
+            <h2>Mudanças climáticas</h2>
+            <p>Entenda causas, efeitos e impactos no planeta.</p>
+            <span class="selo-ok oculta">Concluído</span>
+            <button type="button" class="btn btn-mini" data-modulo="clima">Ver módulo<svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </li>
+          <li class="modulo" data-id="desastres">
+            <span class="modulo-icone"><svg aria-hidden="true"><use href="#i-nuvem"/></svg></span>
+            <h2>Desastres naturais</h2>
+            <p>Aprenda sobre enchentes, secas, deslizamentos e prevenção.</p>
+            <span class="selo-ok oculta">Concluído</span>
+            <button type="button" class="btn btn-mini" data-modulo="desastres">Ver módulo<svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </li>
+          <li class="modulo" data-id="sustentabilidade">
+            <span class="modulo-icone"><svg aria-hidden="true"><use href="#i-broto"/></svg></span>
+            <h2>Sustentabilidade</h2>
+            <p>Descubra práticas sustentáveis para o dia a dia.</p>
+            <span class="selo-ok oculta">Concluído</span>
+            <button type="button" class="btn btn-mini" data-modulo="sustentabilidade">Ver módulo<svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </li>
+          <li class="modulo" data-id="biomas">
+            <span class="modulo-icone"><svg aria-hidden="true"><use href="#i-mapa"/></svg></span>
+            <h2>Biomas do RS</h2>
+            <p>Conheça o Pampa, a Mata Atlântica e sua importância.</p>
+            <span class="selo-ok oculta">Concluído</span>
+            <button type="button" class="btn btn-mini" data-modulo="biomas">Ver módulo<svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </li>
+        </ul>
+
+        <div class="aprender-linha">
+          <div class="cartao-claro destaques">
+            <h2 class="rotulo"><svg aria-hidden="true"><use href="#i-folha"/></svg>Destaques</h2>
+            <ul>
+              <li><button type="button" data-modulo="sustentabilidade"><span class="modulo-icone pequeno"><svg aria-hidden="true"><use href="#i-broto"/></svg></span><span><b>Ações sustentáveis</b><small>Pequenas atitudes que fazem grande diferença no planeta.</small></span></button></li>
+              <li><button type="button" data-modulo="desastres"><span class="modulo-icone pequeno"><svg aria-hidden="true"><use href="#i-gota"/></svg></span><span><b>Como agir em enchentes</b><small>Dicas de prevenção e segurança para proteger vidas.</small></span></button></li>
+              <li><button type="button" data-modulo="biomas"><span class="modulo-icone pequeno"><svg aria-hidden="true"><use href="#i-mapa"/></svg></span><span><b>Impacto ambiental no RS</b><small>Entenda os principais desafios ambientais do nosso estado.</small></span></button></li>
+            </ul>
+          </div>
+
+          <div class="cartao-escuro progresso">
+            <h2 class="rotulo"><svg aria-hidden="true"><use href="#i-folha"/></svg>Seu progresso</h2>
+            <div class="progresso-corpo">
+              <svg class="anel" viewBox="0 0 72 72" role="img" aria-labelledby="anel-txt">
+                <title id="anel-txt">Módulos concluídos</title>
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#2c5a43" stroke-width="7"/>
+                <circle id="anel-valor" cx="36" cy="36" r="30" fill="none" stroke="#7fd68a" stroke-width="7" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5" transform="rotate(-90 36 36)"/>
+                <text id="anel-num" x="36" y="42" text-anchor="middle">0/4</text>
+              </svg>
+              <div>
+                <p class="mini-label">Módulos concluídos</p>
+                <div class="barra" aria-hidden="true"><span id="barra-modulos"></span></div>
+                <p id="progresso-nota" class="mini-nota">Entre para salvar seu progresso.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DESAFIOS (JOGO) ===== -->
+      <section id="tela-jogo" class="tela oculta" aria-labelledby="t-jogo">
+        <header class="cab-pagina cab-simples">
+          <div class="cab-texto">
+            <p class="selo"><svg aria-hidden="true"><use href="#i-controle"/></svg>Missão 1</p>
+            <h1 id="t-jogo" class="titulo-grande" tabindex="-1">Desafios</h1>
+            <p class="sub">Cidade Resiliente: prepare a cidade antes da tempestade, escolhendo bem onde gastar a verba.</p>
+          </div>
+        </header>
+
+        <!-- Para quem ainda não entrou -->
+        <div id="jogo-bloqueado" class="aviso-login">
+          <svg aria-hidden="true"><use href="#i-escudo"/></svg>
+          <div>
+            <h2>Entre para jogar</h2>
+            <p>Sua pontuação fica salva no seu perfil e aparece no Ranking. Leva menos de um minuto.</p>
+            <div class="grupo">
+              <button type="button" class="btn btn-escuro" data-abrir="dlg-cadastro">Cadastre-se</button>
+              <button type="button" class="btn btn-claro" data-abrir="dlg-entrar">Já tenho conta</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Para quem já entrou -->
+        <div id="jogo-area" class="oculta">
+          <p class="jogo-info">Jogando como <strong id="jogador-nome">-</strong> &middot; Pontuação acumulada: <strong id="jogador-pontos">0</strong></p>
+          <!--
+            Export HTML5 do Godot fica em godot/ (index.html/js/wasm/pck).
+            O iframe isola o canvas e o teclado do Godot da página: os forms e
+            botões daqui continuam com preventDefault() (critério 2).
+            O src só é preenchido quando a tela do jogo abre.
+          -->
+          <div class="jogo-embed">
+            <iframe id="jogo-frame" class="oculta" data-src="godot/index.html"
+                    title="Jogo NGN Technologies: Missão 1, Cidade Resiliente"
+                    aria-describedby="jogo-descricao" allow="autoplay; fullscreen"></iframe>
+            <p id="jogo-placeholder">O jogo ainda não foi publicado nesta versão do site.</p>
+          </div>
+          <!-- Critério 5: texto alternativo do jogo para leitores de tela -->
+          <p id="jogo-descricao" class="sr-only">Jogo educativo feito na Godot Engine em que o jogador prepara uma cidade para uma tempestade ao longo de cinco dias, escolhendo uma entre três ações por dia, cada uma com um custo. Use o mouse ou o toque dentro da área do jogo.</p>
+          <p id="jogo-feedback" role="status" aria-live="polite"></p>
+        </div>
+
+        <ol class="como-jogar">
+          <li><b>1</b><span>Ouça o Sérgio e veja o evento do dia.</span></li>
+          <li><b>2</b><span>Escolha <em>uma</em> entre três ações. Cada uma tem um custo.</span></li>
+          <li><b>3</b><span>Em 5 dias, a tempestade chega e testa a cidade.</span></li>
+          <li><b>4</b><span>Seus pontos vão direto para o Ranking.</span></li>
+        </ol>
+      </section>
+
+      <!-- ===== RANKING ===== -->
+      <section id="tela-ranking" class="tela oculta" aria-labelledby="t-ranking">
+        <header class="cab-pagina">
+          <div class="cab-texto">
+            <p class="selo"><svg aria-hidden="true"><use href="#i-trofeu"/></svg>Ranking</p>
+            <h1 id="t-ranking" class="titulo-grande" tabindex="-1">Ranking</h1>
+            <p class="sub">Veja os jogadores que mais estão fazendo a diferença! Quanto mais você aprende e joga, maior será seu impacto no planeta.</p>
+          </div>
+          <div class="cab-arte" aria-hidden="true"><svg viewBox="0 0 480 440"><use href="#arte"/></svg></div>
+        </header>
+
+        <div class="rank-grade">
+          <div class="rank-tabela">
+            <p class="aba"><svg aria-hidden="true"><use href="#i-globo"/></svg>Global</p>
+            <div class="tabela-caixa">
+              <table>
+                <caption class="sr-only">Ranking de jogadores por pontuação, do maior para o menor</caption>
+                <thead>
+                  <tr><th scope="col">Posição</th><th scope="col">Jogador</th><th scope="col">Nível</th><th scope="col">Pontos</th><th scope="col">Conquistas</th></tr>
+                </thead>
+                <tbody id="ranking-corpo">
+                  <tr><td colspan="5">Nenhum jogador cadastrado ainda.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <aside class="rank-lado" id="rank-lado" aria-label="Sua posição"></aside>
+        </div>
+        <p class="nota">O ranking é salvo neste navegador. A sincronização entre aparelhos e escolas é uma melhoria futura. Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos.</p>
+      </section>
+
+      <!-- ===== SOBRE ===== -->
+      <section id="tela-sobre" class="tela oculta" aria-labelledby="t-sobre">
+        <div class="sobre-topo">
+          <div class="sobre-texto">
+            <h1 id="t-sobre" class="titulo-sobre" tabindex="-1">Tecnologia e educação para um futuro sustentável.</h1>
+            <p>O NGN Technologies (Next Gen Nature) é um jogo educativo criado para conscientizar crianças e adolescentes sobre sustentabilidade, mudanças climáticas e prevenção de desastres naturais. Nosso objetivo é transformar o aprendizado em uma experiência mais interativa, divertida e significativa.</p>
+          </div>
+          <div class="sobre-arte" aria-hidden="true"><svg viewBox="0 0 480 440"><use href="#arte"/></svg></div>
+        </div>
+
+        <div class="sobre-duplo">
+          <article class="cartao-claro">
+            <h2 class="titulo-card"><svg aria-hidden="true"><use href="#i-folha"/></svg>O que é o NGN?</h2>
+            <p>O NGN Technologies é um projeto desenvolvido por estudantes do Curso Técnico em Informática da Escola Técnica Estadual Monteiro Lobato. Seu objetivo é utilizar a gamificação para ensinar práticas sustentáveis e ampliar o conhecimento sobre questões ambientais.</p>
+          </article>
+          <article class="cartao-claro">
+            <h2 class="titulo-card"><svg aria-hidden="true"><use href="#i-pessoas"/></svg>Público-alvo</h2>
+            <p>O projeto é voltado principalmente para crianças e adolescentes do Rio Grande do Sul, buscando tornar o aprendizado mais acessível e envolvente.</p>
+          </article>
+        </div>
+
+        <h2 class="rotulo rotulo-grande"><svg aria-hidden="true"><use href="#i-folha"/></svg>Objetivos do projeto</h2>
+        <ul class="objetivos">
+          <li><span class="obj-icone"><svg aria-hidden="true"><use href="#i-folha"/></svg></span><div><h3>Conscientizar</h3><p>Promover a educação ambiental e incentivar atitudes sustentáveis.</p></div></li>
+          <li><span class="obj-icone"><svg aria-hidden="true"><use href="#i-controle"/></svg></span><div><h3>Aprender jogando</h3><p>Transformar conteúdos sobre meio ambiente em desafios interativos.</p></div></li>
+          <li><span class="obj-icone"><svg aria-hidden="true"><use href="#i-escudo"/></svg></span><div><h3>Prevenir desastres</h3><p>Ensinar formas de prevenção e preparação para eventos climáticos extremos.</p></div></li>
+          <li><span class="obj-icone"><svg aria-hidden="true"><use href="#i-capelo"/></svg></span><div><h3>Apoiar a educação</h3><p>Oferecer uma ferramenta complementar para escolas e comunidades.</p></div></li>
+        </ul>
+
+        <div class="banda">
+          <div class="banda-visao">
+            <span class="banda-icone"><svg aria-hidden="true"><use href="#i-broto"/></svg></span>
+            <div>
+              <h2>Nossa visão</h2>
+              <p>Acreditamos que pequenas ações podem gerar grandes mudanças. Por isso, queremos unir tecnologia e educação para formar uma geração mais consciente e preparada para os desafios ambientais do futuro.</p>
+            </div>
+          </div>
+          <div class="banda-dev">
+            <svg aria-hidden="true"><use href="#i-pessoas"/></svg>
+            <div>
+              <h2>Desenvolvido por</h2>
+              <p><b>Cássio Sousa Silva</b><br><b>Sérgio Luiz Della-Flora Magalhães</b></p>
+              <p>Curso Técnico em Informática<br>Escola Técnica Estadual Monteiro Lobato &ndash; Taquara/RS</p>
+            </div>
+          </div>
+        </div>
+        <p class="nota">Seus dados (nome, e-mail, escola e pontos) ficam apenas no seu navegador e não são enviados a nenhum servidor.</p>
+      </section>
+
+    </main>
+
+    <p class="rodape-mobile">&copy; 2026 NGN Technologies. Todos os direitos reservados.</p>
+  </div>
+</div>
+
+<!-- MODAL: ENTRAR -->
+<dialog id="dlg-entrar" class="modal" aria-labelledby="t-entrar">
+  <form id="form-entrar" method="dialog" novalidate>
+    <button type="button" class="fechar" data-fechar aria-label="Fechar">&times;</button>
+    <h2 id="t-entrar">Bem-vindo de volta!</h2>
+    <p class="mudo">Use o e-mail do seu cadastro.</p>
+    <div class="campo">
+      <label for="entrar-email">E-mail</label>
+      <input type="email" id="entrar-email" name="email" required autocomplete="email">
+    </div>
+    <button type="submit" class="btn btn-verde btn-bloco">Entrar</button>
+    <p id="entrar-feedback" class="feedback" role="status" aria-live="polite"></p>
+    <p class="troca">Ainda não tem uma conta? <button type="button" class="link" data-abrir="dlg-cadastro">Cadastre-se</button></p>
+  </form>
+</dialog>
+
+<!-- MODAL: CADASTRO -->
+<dialog id="dlg-cadastro" class="modal" aria-labelledby="t-cadastro">
+  <form id="form-cadastro" method="dialog" novalidate>
+    <button type="button" class="fechar" data-fechar aria-label="Fechar">&times;</button>
+    <h2 id="t-cadastro">Comece agora</h2>
+    <p class="mudo">Crie seu perfil de jogador.</p>
+    <div class="campo">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required minlength="2" autocomplete="name">
+    </div>
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required autocomplete="email">
+    </div>
+    <div class="campo">
+      <label for="escola">Escola <span class="mudo">(opcional)</span></label>
+      <input type="text" id="escola" name="escola" autocomplete="organization">
+    </div>
+    <button type="submit" class="btn btn-verde btn-bloco">Criar conta e jogar</button>
+    <p id="auth-feedback" class="feedback" role="status" aria-live="polite"></p>
+    <p class="troca">Já tem uma conta? <button type="button" class="link" data-abrir="dlg-entrar">Entrar</button></p>
+  </form>
+</dialog>
+
+<!-- MODAL: MÓDULO DE APRENDIZADO (preenchido pelo script.js) -->
+<dialog id="dlg-modulo" class="modal modal-largo" aria-labelledby="modulo-titulo">
+  <div class="modulo-conteudo">
+    <button type="button" class="fechar" data-fechar aria-label="Fechar">&times;</button>
+    <p class="selo"><svg aria-hidden="true"><use href="#i-livro"/></svg>Aprender</p>
+    <h2 id="modulo-titulo">-</h2>
+    <p id="modulo-resumo" class="mudo"></p>
+    <div id="modulo-topicos" class="modulo-topicos"></div>
+    <p id="modulo-feedback" class="feedback" role="status" aria-live="polite"></p>
+    <div class="grupo">
+      <button type="button" class="btn btn-verde" id="modulo-concluir">Marcar como concluído</button>
+      <button type="button" class="btn btn-claro" data-fechar>Fechar</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="script.js?v=4"></script>
 </body>
 </html>
