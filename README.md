@@ -56,3 +56,4 @@ Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a 
 - Trocar o desenho do mapa e do Sérgio por arte exportada do Figma (`godot/` guarda o export do jogo; ver `NGN-Godot/LEIAME.md`).
 
 https://cavmferwi.github.io/tcc/
+
