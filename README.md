@@ -23,7 +23,7 @@ func enviar_pontos(qtd: int) -> void:
 		)
 ```
 
-A página soma os pontos ao jogador logado, salva no `localStorage` e atualiza o ranking. Mensagens de outra origem, de fora do iframe do jogo ou com valor que não seja inteiro positivo são ignoradas.
+A página guarda a **melhor pontuação** do jogador logado (jogar de novo só atualiza se for recorde), salva no `localStorage` e atualiza o ranking. Mensagens de outra origem, de fora do iframe do jogo ou com valor que não seja inteiro entre 1 e 700 são ignoradas.
 
 ## Como o site guarda os dados
 
@@ -38,7 +38,7 @@ Não há senha: o "login" é só por e-mail, dentro do próprio navegador. Níve
 
 ## Cache
 
-Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a cada mudança, para o navegador não usar arquivos antigos (hoje: `?v=4`).
+Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a cada mudança, para o navegador não usar arquivos antigos (hoje: `?v=6`).
 
 ## Checklist dos 5 critérios de avaliação
 

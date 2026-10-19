@@ -265,7 +265,8 @@ h1 .h1-tech { display: block; font-family: var(--display); font-weight: 700; fon
 .aviso-login h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 800; text-transform: uppercase; }
 .aviso-login p { color: #34493c; }
 
-.jogo-info { margin: 0 0 .8rem; font-size: .85rem; color: #34493c; overflow-wrap: anywhere; }
+.jogo-barra { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: .8rem; }
+.jogo-info { margin: 0; font-size: .85rem; color: #34493c; overflow-wrap: anywhere; }
 .jogo-info strong { color: var(--txt); }
 
 /* Critério 5: o jogo encolhe com a tela, mantendo a proporção 16:9 */
@@ -275,6 +276,8 @@ h1 .h1-tech { display: block; font-family: var(--display); font-weight: 700; fon
   box-shadow: 0 20px 50px rgba(20, 56, 42, .35);
 }
 .jogo-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+/* Tela cheia: o jogo ocupa o monitor inteiro (o Godot centraliza o 16:9 com barras pretas) */
+.jogo-embed:fullscreen { aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; }
 #jogo-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0; padding: 1rem; color: #8fe09a; }
 #jogo-placeholder.oculta { display: none !important; }
 #jogo-feedback { color: var(--verde-texto); font-weight: 600; }

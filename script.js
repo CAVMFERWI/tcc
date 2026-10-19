@@ -16,6 +16,8 @@ const TELAS = ["tela-inicio", "tela-aprender", "tela-jogo", "tela-ranking", "tel
 
 // Nível = 1 + 1 a cada PONTOS_NIVEL pontos. Conquistas por pontos acumulados.
 const PONTOS_NIVEL = 150;
+// Máximo possível numa partida (444 pelas ações + 200 de bônus, com folga): rejeita valores forjados.
+const PONTOS_MAX = 700;
 const CONQUISTAS = [
   { min: 1, icone: "i-folha", nome: "Primeira missão" },
   { min: 300, icone: "i-escudo", nome: "Cidade preparada" },
@@ -391,7 +393,8 @@ function cadastrar(dados) {
   entrarComoJogador(jogador);
 }
 
-function somarPontos(qtd) {
+// O ranking guarda só a MELHOR pontuação: jogar de novo não infla o total.
+function registrarPontuacao(qtd) {
   const sessao = lerSessao();
   if (!sessao) return;
 
@@ -399,13 +402,18 @@ function somarPontos(qtd) {
   const jogador = jogadores.find((j) => j.email === sessao.email);
   if (!jogador) return;
 
-  jogador.pontos += qtd;
-  salvarJogadores(jogadores);
-  salvarSessao(jogador);
+  const recorde = qtd > jogador.pontos;
+  if (recorde) {
+    jogador.pontos = qtd;
+    salvarJogadores(jogadores);
+    salvarSessao(jogador);
+  }
 
   $("jogador-pontos").textContent = jogador.pontos;
   $("chip-pontos").textContent = jogador.pontos;
-  $("jogo-feedback").textContent = `+${qtd} pontos registrados e salvos.`;
+  $("jogo-feedback").textContent = recorde
+    ? `Novo recorde: ${qtd} pontos registrados e salvos!`
+    : `Você fez ${qtd} pontos. Seu recorde continua ${jogador.pontos}.`;
 }
 
 // ---------- Modais ----------
@@ -519,7 +527,15 @@ function iniciar() {
     const frame = $("jogo-frame");
     if (e.origin !== location.origin || e.source !== frame.contentWindow) return;
     const { tipo, pontos } = e.data || {};
-    if (tipo === "ngn_pontos" && Number.isInteger(pontos) && pontos > 0) somarPontos(pontos);
+    if (tipo === "ngn_pontos" && Number.isInteger(pontos) && pontos > 0 && pontos <= PONTOS_MAX) registrarPontuacao(pontos);
+  });
+
+  // Tela cheia (Esc sai). iPhone não suporta: o botão some.
+  const botaoCheia = $("btn-tela-cheia");
+  if (!document.fullscreenEnabled) botaoCheia.classList.add("oculta");
+  botaoCheia.addEventListener("click", () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.querySelector(".jogo-embed").requestFullscreen().catch(() => {});
   });
 
   $("btn-sair").addEventListener("click", () => {

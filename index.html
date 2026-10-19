@@ -9,7 +9,7 @@
 <!-- Critério 4: favicon vazio evita o 404 vermelho de /favicon.ico no console -->
 <link rel="icon" href="data:,">
 <!-- O número depois de ?v= sobe a cada mudança, para o navegador não usar CSS/JS antigo em cache -->
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body data-tela="tela-inicio">
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
@@ -254,7 +254,10 @@
 
         <!-- Para quem já entrou -->
         <div id="jogo-area" class="oculta">
-          <p class="jogo-info">Jogando como <strong id="jogador-nome">-</strong> &middot; Pontuação acumulada: <strong id="jogador-pontos">0</strong></p>
+          <div class="jogo-barra">
+            <p class="jogo-info">Jogando como <strong id="jogador-nome">-</strong> &middot; Melhor pontuação: <strong id="jogador-pontos">0</strong></p>
+            <button type="button" id="btn-tela-cheia" class="btn btn-mini">Tela cheia</button>
+          </div>
           <!--
             Export HTML5 do Godot fica em godot/ (index.html/js/wasm/pck).
             O iframe isola o canvas e o teclado do Godot da página: os forms e
@@ -276,7 +279,7 @@
           <li><b>1</b><span>Ouça o Sérgio e veja o evento do dia.</span></li>
           <li><b>2</b><span>Escolha <em>uma</em> entre três ações. Cada uma tem um custo.</span></li>
           <li><b>3</b><span>Em 5 dias, a tempestade chega e testa a cidade.</span></li>
-          <li><b>4</b><span>Seus pontos vão direto para o Ranking.</span></li>
+          <li><b>4</b><span>Sua melhor pontuação vai para o Ranking.</span></li>
         </ol>
       </section>
 
@@ -422,6 +425,6 @@
   </div>
 </dialog>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
