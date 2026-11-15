@@ -34,11 +34,15 @@ A página guarda a **melhor pontuação** do jogador logado (jogar de novo só a
 | `ngn_modulos` | localStorage | módulos de Aprender concluídos, por e-mail |
 | `ngn_tela` | sessionStorage | última tela aberta (o F5 volta para ela) |
 
-Não há senha: o "login" é só por e-mail, dentro do próprio navegador. Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos acumulados.
+Não há senha: o "login" é só por e-mail, dentro do próprio navegador.
+
+## Ranking online (Firebase)
+
+O ranking é compartilhado entre todos os aparelhos pelo **Cloud Firestore** (projeto `ngn-technologies`, região São Paulo), em `ranking-online.js`. Só vão para lá o nome, a escola e a melhor pontuação (nunca o e-mail). Cada navegador entra com **login anônimo** e as regras do Firestore só deixam ler a lista, criar o próprio registro e aumentar a própria pontuação (0 a 700); apagar é proibido. Se o Firebase não responder, a tela mostra o ranking deste navegador, sem erro no console. O cadastro, a sessão e o progresso continuam no `localStorage`. Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos acumulados.
 
 ## Cache
 
-Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a cada mudança, para o navegador não usar arquivos antigos (hoje: `?v=6`).
+Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a cada mudança, para o navegador não usar arquivos antigos (hoje: `script.js?v=7`, `ranking-online.js?v=1`).
 
 ## Checklist dos 5 critérios de avaliação
 
@@ -46,13 +50,13 @@ Em `index.html`, o número depois de `?v=` em `styles.css` e `script.js` sobe a 
 | --- | --- | --- |
 | 1. Deploy e Funcionamento | ✅ | Site estático (sem build), publicado no GitHub Pages. Caminhos relativos para `godot/` (`.wasm`/`.pck`) e `fonts/`. |
 | 2. Interatividade sem Recarregamento | ✅ | Os formulários Entrar e Cadastre-se usam `e.preventDefault()`; o menu lateral troca `classList`, sem `<a href>` nem reload; módulos de Aprender abrem em `<dialog>`. |
-| 3. Persistência de Dados | ✅ | Jogadores, sessão e módulos concluídos em `localStorage`; última tela em `sessionStorage`. Após F5, sessão e tela são restauradas. |
+| 3. Persistência de Dados | ✅ | Jogadores, sessão e módulos concluídos em `localStorage`; última tela em `sessionStorage`. Após F5, sessão e tela são restauradas. O ranking também é salvo online no Firebase, para todos os aparelhos. |
 | 4. Estabilidade do Console | ✅ | Todo acesso ao storage está em `try/catch`; favicon vazio evita o 404; fontes locais; textos de usuário só entram com `textContent` (sem `innerHTML`); a ponte do jogo valida origem, iframe e valor. Testado sem erros no console. |
 | 5. Adaptabilidade e Responsividade | ✅ | Testado de 360px a 1366px, sem scroll horizontal. Até 820px o menu lateral vira barra fixa embaixo; até 640px a tabela do ranking vira cartões. Acessibilidade: foco visível, link "Ir para o conteúdo", `<dialog>` com título e rótulos, `<caption>` e `scope` na tabela, `aria-label` nos ícones e respeito a `prefers-reduced-motion`. |
 
 ## Pendências para produção
 
-- Ranking entre aparelhos e escolas: sincronizar com Firebase (ver seção 5.9.4 do projeto de pesquisa), mantendo o `localStorage` como cache local.
+- Login de verdade (e-mail e senha pelo Firebase Authentication), para impedir que alguém com conhecimento técnico envie uma pontuação forjada.
 - Trocar o desenho do mapa e do Sérgio por arte exportada do Figma (`godot/` guarda o export do jogo; ver `NGN-Godot/LEIAME.md`).
 
 https://cavmferwi.github.io/tcc/

@@ -266,10 +266,34 @@ function medalhas(pontos) {
   return grupo;
 }
 
+const NOTA_ONLINE = "Ranking online: os melhores jogadores de todos os aparelhos. Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos.";
+const NOTA_LOCAL = "Mostrando o ranking salvo neste navegador (o ranking online não respondeu). Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos.";
+
+// O mesmo jogador: pelo e-mail na lista local, pelo id na lista online (que não guarda e-mails).
+const ehEu = (j, sessao) => !!sessao && (j.email ? j.email === sessao.email : !!j.idOnline && j.idOnline === sessao.idOnline);
+
+// Mostra primeiro o ranking deste navegador e, quando o Firebase responder,
+// troca pelo ranking online de todos os jogadores.
 function renderizarRanking() {
-  const corpo = $("ranking-corpo");
-  const jogadores = [...lerJogadores()].sort((a, b) => b.pontos - a.pontos);
   const sessao = lerSessao();
+  desenharRanking([...lerJogadores()].sort((a, b) => b.pontos - a.pontos), sessao, false);
+  if (!window.NGNOnline) return;
+  $("ranking-nota").textContent = "Carregando o ranking online…";
+  if (sessao && sessao.pontos > 0 && !sessao.idOnline) sincronizar(sessao);
+  window.NGNOnline.listar().then((online) => {
+    if (!online) {
+      $("ranking-nota").textContent = NOTA_LOCAL;
+      return;
+    }
+    const eu = sessao && lerJogadores().find((j) => j.email === sessao.email);
+    if (eu && eu.pontos > 0 && !online.some((j) => ehEu(j, eu))) online.push(eu);
+    desenharRanking(online.sort((a, b) => b.pontos - a.pontos), lerSessao(), true);
+  });
+}
+
+function desenharRanking(jogadores, sessao, online) {
+  const corpo = $("ranking-corpo");
+  $("ranking-nota").textContent = online ? NOTA_ONLINE : NOTA_LOCAL;
 
   renderizarLado(jogadores, sessao);
 
@@ -287,7 +311,7 @@ function renderizarRanking() {
   corpo.replaceChildren(
     ...jogadores.map((j, i) => {
       const linha = el("tr");
-      if (sessao && sessao.email === j.email) linha.classList.add("eu");
+      if (ehEu(j, sessao)) linha.classList.add("eu");
 
       const celula = (rotulo, classe) => {
         const td = el("td", classe || "");
@@ -323,7 +347,7 @@ function renderizarLado(jogadores, sessao) {
   const lado = $("rank-lado");
   lado.replaceChildren(el("h2", "", "Sua posição"));
 
-  const eu = sessao && jogadores.find((j) => j.email === sessao.email);
+  const eu = sessao && jogadores.find((j) => ehEu(j, sessao));
   if (!eu) {
     lado.append(el("p", "lado-vazio", "Entre e jogue para aparecer no ranking."));
     const b = el("button", "btn btn-claro", "Entrar");
@@ -333,7 +357,7 @@ function renderizarLado(jogadores, sessao) {
     return;
   }
 
-  const posicao = jogadores.findIndex((j) => j.email === eu.email) + 1;
+  const posicao = jogadores.indexOf(eu) + 1;
   const nivel = nivelDe(eu.pontos);
   const xp = eu.pontos % PONTOS_NIVEL;
 
@@ -409,11 +433,30 @@ function registrarPontuacao(qtd) {
     salvarSessao(jogador);
   }
 
+  if (recorde) sincronizar(jogador);
   $("jogador-pontos").textContent = jogador.pontos;
   $("chip-pontos").textContent = jogador.pontos;
   $("jogo-feedback").textContent = recorde
     ? `Novo recorde: ${qtd} pontos registrados e salvos!`
     : `Você fez ${qtd} pontos. Seu recorde continua ${jogador.pontos}.`;
+}
+
+// Manda o recorde para o ranking online e guarda o id que o Firebase aceitou.
+async function sincronizar(jogador) {
+  if (!window.NGNOnline) return;
+  const id = await window.NGNOnline.enviar(jogador);
+  if (!id || id === jogador.idOnline) return;
+  const lista = lerJogadores();
+  const j = lista.find((x) => x.email === jogador.email);
+  if (j) {
+    j.idOnline = id;
+    salvarJogadores(lista);
+  }
+  const s = lerSessao();
+  if (s && s.email === jogador.email) {
+    s.idOnline = id;
+    salvarSessao(s);
+  }
 }
 
 // ---------- Modais ----------

@@ -265,7 +265,7 @@
             O src só é preenchido quando a tela do jogo abre.
           -->
           <div class="jogo-embed">
-            <iframe id="jogo-frame" class="oculta" data-src="godot/index.html?v=20261025"
+            <iframe id="jogo-frame" class="oculta" data-src="godot/index.html?v=20261115"
                     title="Jogo NGN Technologies: Missão 1, Cidade Resiliente"
                     aria-describedby="jogo-descricao" allow="autoplay; fullscreen"></iframe>
             <p id="jogo-placeholder">O jogo ainda não foi publicado nesta versão do site.</p>
@@ -311,7 +311,7 @@
           </div>
           <aside class="rank-lado" id="rank-lado" aria-label="Sua posição"></aside>
         </div>
-        <p class="nota">O ranking é salvo neste navegador. A sincronização entre aparelhos e escolas é uma melhoria futura. Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos.</p>
+        <p class="nota" id="ranking-nota" aria-live="polite">Nível = 1 + 1 a cada 150 pontos; conquistas aos 1, 300 e 600 pontos.</p>
       </section>
 
       <!-- ===== SOBRE ===== -->
@@ -425,6 +425,7 @@
   </div>
 </dialog>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
+<script type="module" src="ranking-online.js?v=1"></script>
 </body>
 </html>
